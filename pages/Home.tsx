@@ -1,75 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Terminal, Monitor, Cpu } from 'lucide-react';
-import { Language } from '../types';
-import { translations } from '../translations';
+import { BookOpen, Feather, Share2, ArrowRight } from 'lucide-react';
 
-export const Home: React.FC<{ lang: Language }> = ({ lang }) => {
-  const t = translations[lang];
-  const isRtl = lang === 'ar';
-
+export const Home: React.FC = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-brand-dark py-20 lg:py-32">
-        {/* Background Decorations */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-brand-primary/20 rounded-full blur-3xl opacity-30 -z-10 pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[800px] h-[400px] bg-brand-accent/10 rounded-full blur-3xl opacity-20 -z-10 pointer-events-none"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-card border border-brand-primary/30 text-brand-accent text-xs font-medium mb-8 animate-fade-in-up">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
-            </span>
-            100% Free Education
+      <div className="flex-grow flex flex-col justify-center bg-stone-50 py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-200 text-stone-700 text-xs font-bold uppercase tracking-wider mb-8">
+            For Writers & Creators
           </div>
-
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-            {t.heroTitle}
+          
+          <h1 className="font-display text-5xl md:text-7xl font-bold text-stone-900 mb-6 leading-tight">
+            Your Words Deserve <br/>
+            <span className="italic text-stone-600">A Beautiful Home.</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {t.heroSubtitle}
+          <p className="font-serif text-lg md:text-xl text-stone-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Build a professional author profile in minutes. Showcase your books, articles, and bio with a minimal, elegant design. No coding required.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/courses"
-              className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-xl text-white font-semibold shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
+              to="/dashboard"
+              className="group px-8 py-4 bg-stone-900 text-white rounded-full font-medium text-lg hover:bg-stone-800 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
             >
-              {t.startLearning}
-              <ArrowRight className={`w-5 h-5 transition-transform ${isRtl ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
+              Create Your Profile
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            
-            <a
-              href="#mission"
-              className="w-full sm:w-auto px-8 py-4 bg-brand-card border border-gray-700 rounded-xl text-gray-300 font-medium hover:bg-gray-800 transition-colors"
+            <Link
+              to="/profile"
+              className="px-8 py-4 bg-white text-stone-900 border border-stone-200 rounded-full font-medium text-lg hover:bg-stone-50 transition-colors"
             >
-              {t.mission}
-            </a>
+              See Example
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Features/Mission Section */}
-      <div id="mission" className="py-20 bg-brand-card/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* Features Section */}
+      <div className="bg-white py-20 border-t border-stone-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-12">
             <FeatureCard 
-              icon={<Terminal className="w-8 h-8 text-brand-accent" />}
-              title="Hands-on Coding"
-              desc="Practice with real-world projects and exercises."
+              icon={<BookOpen className="w-8 h-8" />}
+              title="Showcase Books"
+              desc="Beautifully display your published works with covers, descriptions, and purchase links."
             />
             <FeatureCard 
-              icon={<Monitor className="w-8 h-8 text-brand-secondary" />}
-              title="Modern Curriculum"
-              desc="Updated courses covering the latest tech stacks."
+              icon={<Feather className="w-8 h-8" />}
+              title="Curate Articles"
+              desc="Link to your best writing from across the web in one organized list."
             />
             <FeatureCard 
-              icon={<Cpu className="w-8 h-8 text-brand-primary" />}
-              title="Career Ready"
-              desc="Build a portfolio that gets you hired."
+              icon={<Share2 className="w-8 h-8" />}
+              title="Share Anywhere"
+              desc="Get a clean, professional link to share on social media or your email signature."
             />
           </div>
         </div>
@@ -79,9 +66,9 @@ export const Home: React.FC<{ lang: Language }> = ({ lang }) => {
 };
 
 const FeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
-  <div className="p-6 bg-brand-card border border-gray-800 rounded-2xl hover:border-gray-600 transition-all duration-300">
-    <div className="mb-4 p-3 bg-brand-dark w-fit rounded-lg">{icon}</div>
-    <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-    <p className="text-gray-400">{desc}</p>
+  <div className="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-stone-50 transition-colors">
+    <div className="mb-6 p-4 bg-stone-100 rounded-full text-stone-800">{icon}</div>
+    <h3 className="font-display text-2xl font-bold text-stone-900 mb-3">{title}</h3>
+    <p className="font-serif text-stone-500 leading-relaxed">{desc}</p>
   </div>
 );

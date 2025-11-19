@@ -1,7 +1,45 @@
+export interface Book {
+  id: string;
+  title: string;
+  coverUrl: string;
+  link: string;
+  description?: string;
+}
+
+export interface Article {
+  id: string;
+  title: string;
+  link: string;
+  publishedDate?: string;
+  publication?: string;
+}
+
+export interface SocialLinks {
+  twitter?: string;
+  instagram?: string;
+  linkedin?: string;
+  website?: string;
+  email?: string;
+}
+
+export interface AuthorProfile {
+  name: string;
+  bio: string;
+  tagline: string;
+  avatarUrl: string;
+  coverImageUrl: string;
+  themeColor: string; // Hex code or tailwind class prefix
+  social: SocialLinks;
+  books: Book[];
+  articles: Article[];
+}
+
+export type Language = 'en' | 'ar';
+
 export enum CourseLevel {
   Beginner = 'Beginner',
   Intermediate = 'Intermediate',
-  Advanced = 'Advanced',
+  Advanced = 'Advanced'
 }
 
 export interface Course {
@@ -16,69 +54,53 @@ export interface Course {
   category: string;
 }
 
-export interface StudentProgress {
+export interface Progress {
   courseId: string;
-  completedLessons: number;
-  totalLessons: number;
-  isCompleted: boolean;
+  completed: boolean;
 }
 
-export type Language = 'en' | 'ar';
-
-export const INITIAL_COURSES: Course[] = [
-  {
-    id: '1',
-    title: 'HTML & CSS Mastery',
-    titleAr: 'HTML & CSS احتراف',
-    description: 'Build beautiful websites from scratch using modern HTML5 and CSS3 techniques.',
-    descriptionAr: 'قم ببناء مواقع ويب جميلة من الصفر باستخدام تقنيات HTML5 و CSS3 الحديثة.',
-    level: CourseLevel.Beginner,
-    duration: '15 Hours',
-    image: 'https://picsum.photos/id/1/400/250',
-    category: 'Frontend'
+export const DEFAULT_PROFILE: AuthorProfile = {
+  name: "Elena Vance",
+  tagline: "Bestselling Author of 'The Silent Echo'",
+  bio: "Elena Vance is a contemporary fiction writer based in Seattle. Her work explores the complexities of human connection in the digital age. When she's not writing, she's probably hiking or brewing excessive amounts of coffee.",
+  avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+  coverImageUrl: "https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+  themeColor: "stone",
+  social: {
+    twitter: "https://twitter.com",
+    email: "hello@example.com",
+    website: "https://example.com"
   },
-  {
-    id: '2',
-    title: 'JavaScript Essentials',
-    titleAr: 'أساسيات الجافا سكريبت',
-    description: 'Master the logic of the web. Variables, loops, functions, and DOM manipulation.',
-    descriptionAr: 'أتقن منطق الويب. المتغيرات، الحلقات، الدوال، والتعامل مع DOM.',
-    level: CourseLevel.Beginner,
-    duration: '20 Hours',
-    image: 'https://picsum.photos/id/3/400/250',
-    category: 'Frontend'
-  },
-  {
-    id: '3',
-    title: 'React JS Zero to Hero',
-    titleAr: 'React JS من الصفر حتى الاحتراف',
-    description: 'Build dynamic single-page applications with React and Hooks.',
-    descriptionAr: 'قم ببناء تطبيقات الصفحة الواحدة الديناميكية باستخدام React و Hooks.',
-    level: CourseLevel.Intermediate,
-    duration: '25 Hours',
-    image: 'https://picsum.photos/id/180/400/250',
-    category: 'Frontend'
-  },
-  {
-    id: '4',
-    title: 'Python for Data Science',
-    titleAr: 'بايثون لعلوم البيانات',
-    description: 'Learn Python programming for data analysis, visualization, and machine learning.',
-    descriptionAr: 'تعلم برمجة بايثون لتحليل البيانات، التصور، والتعلم الآلي.',
-    level: CourseLevel.Beginner,
-    duration: '30 Hours',
-    image: 'https://picsum.photos/id/20/400/250',
-    category: 'Data Science'
-  },
-  {
-    id: '5',
-    title: 'Java Enterprise',
-    titleAr: 'تطبيقات جافا للمؤسسات',
-    description: 'Deep dive into Java, OOP, and backend development.',
-    descriptionAr: 'تعمق في جافا، البرمجة كائنية التوجه، وتطوير الواجهة الخلفية.',
-    level: CourseLevel.Advanced,
-    duration: '40 Hours',
-    image: 'https://picsum.photos/id/60/400/250',
-    category: 'Backend'
-  }
-];
+  books: [
+    {
+      id: "1",
+      title: "The Silent Echo",
+      coverUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+      link: "#",
+      description: "A mystery that unravels across three decades."
+    },
+    {
+      id: "2",
+      title: "Digital Dust",
+      coverUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+      link: "#",
+      description: "How technology is rewriting our memories."
+    }
+  ],
+  articles: [
+    {
+      id: "1",
+      title: "Why I Stopped Plotting My Novels",
+      publication: "The Writer's Digest",
+      link: "#",
+      publishedDate: "2023-11-15"
+    },
+    {
+      id: "2",
+      title: "The Art of the First Draft",
+      publication: "Medium",
+      link: "#",
+      publishedDate: "2023-10-02"
+    }
+  ]
+};

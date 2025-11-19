@@ -1,79 +1,100 @@
-import { Course, StudentProgress, INITIAL_COURSES } from '../types';
+import { AuthorProfile, DEFAULT_PROFILE, Course, CourseLevel, Progress } from '../types';
 
-const KEYS = {
-  COURSES: 'ppff_courses',
-  PROGRESS: 'ppff_progress',
-};
+const STORAGE_KEY = 'web_author_profile';
+const COURSES_KEY = 'ppff_courses';
+const PROGRESS_KEY = 'ppff_progress';
+
+const DEFAULT_COURSES: Course[] = [
+  {
+    id: '1',
+    title: 'Introduction to React',
+    titleAr: 'مقدمة في React',
+    description: 'Learn the basics of React with this comprehensive guide for beginners.',
+    descriptionAr: 'تعلم أساسيات React مع هذا الدليل الشامل للمبتدئين.',
+    level: CourseLevel.Beginner,
+    duration: '5 Hours',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    category: 'Frontend'
+  },
+  {
+    id: '2',
+    title: 'Advanced TypeScript',
+    titleAr: 'TypeScript المتقدمة',
+    description: 'Master TypeScript generics, decorators, and advanced types.',
+    descriptionAr: 'أتقن TypeScript generics و decorators والأنواع المتقدمة.',
+    level: CourseLevel.Advanced,
+    duration: '8 Hours',
+    image: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    category: 'Frontend'
+  }
+];
 
 export const storageService = {
-  // Initialize Data
   init: () => {
-    if (!localStorage.getItem(KEYS.COURSES)) {
-      localStorage.setItem(KEYS.COURSES, JSON.stringify(INITIAL_COURSES));
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
     }
-    if (!localStorage.getItem(KEYS.PROGRESS)) {
-      localStorage.setItem(KEYS.PROGRESS, JSON.stringify([]));
+    if (!localStorage.getItem(COURSES_KEY)) {
+      localStorage.setItem(COURSES_KEY, JSON.stringify(DEFAULT_COURSES));
+    }
+    if (!localStorage.getItem(PROGRESS_KEY)) {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify([]));
     }
   },
 
-  // Course Operations
+  getProfile: (): AuthorProfile => {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : DEFAULT_PROFILE;
+  },
+
+  saveProfile: (profile: AuthorProfile) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+  },
+
+  resetProfile: () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PROFILE));
+    return DEFAULT_PROFILE;
+  },
+
+  // Course related methods
   getCourses: (): Course[] => {
-    const data = localStorage.getItem(KEYS.COURSES);
+    const data = localStorage.getItem(COURSES_KEY);
     return data ? JSON.parse(data) : [];
   },
 
   addCourse: (course: Course) => {
     const courses = storageService.getCourses();
     courses.push(course);
-    localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
+    localStorage.setItem(COURSES_KEY, JSON.stringify(courses));
   },
 
   deleteCourse: (id: string) => {
-    let courses = storageService.getCourses();
-    courses = courses.filter(c => c.id !== id);
-    localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
+    const courses = storageService.getCourses();
+    const updatedCourses = courses.filter(c => c.id !== id);
+    localStorage.setItem(COURSES_KEY, JSON.stringify(updatedCourses));
   },
 
-  // Progress Operations
-  getProgress: (): StudentProgress[] => {
-    const data = localStorage.getItem(KEYS.PROGRESS);
+  // Progress related methods
+  getProgress: (): Progress[] => {
+    const data = localStorage.getItem(PROGRESS_KEY);
     return data ? JSON.parse(data) : [];
   },
 
   enroll: (courseId: string) => {
     const progress = storageService.getProgress();
     if (!progress.find(p => p.courseId === courseId)) {
-      progress.push({
-        courseId,
-        completedLessons: 0,
-        totalLessons: 20, // Mock total
-        isCompleted: false
-      });
-      localStorage.setItem(KEYS.PROGRESS, JSON.stringify(progress));
+      progress.push({ courseId, completed: false });
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
     }
   },
 
-  updateProgress: (courseId: string, completed: number) => {
-    const progress = storageService.getProgress();
-    const idx = progress.findIndex(p => p.courseId === courseId);
-    if (idx !== -1) {
-      progress[idx].completedLessons = completed;
-      if (completed >= progress[idx].totalLessons) {
-        progress[idx].isCompleted = true;
-      }
-      localStorage.setItem(KEYS.PROGRESS, JSON.stringify(progress));
-    }
-  },
-  
   getStats: () => {
-     const courses = storageService.getCourses();
-     // Mocking user count since we don't have real auth/multi-user
-     const users = 1240; 
-     const progress = storageService.getProgress();
-     return {
-         totalCourses: courses.length,
-         activeUsers: users,
-         enrollments: progress.length + 350 // Mock existing enrollments
-     }
+    const courses = storageService.getCourses();
+    const progress = storageService.getProgress();
+    return {
+      totalCourses: courses.length,
+      activeUsers: progress.length > 0 ? 1 : 0, // Mock for single user
+      enrollments: progress.length
+    };
   }
 };

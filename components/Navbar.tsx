@@ -1,105 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Code2 } from 'lucide-react';
-import { translations } from '../translations';
-import { Language } from '../types';
+import { PenTool, User, Layout, ExternalLink } from 'lucide-react';
 
-interface NavbarProps {
-  lang: Language;
-  setLang: (lang: Language) => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ lang, setLang }) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const Navbar: React.FC = () => {
   const location = useLocation();
-  const t = translations[lang];
 
-  const toggleLang = () => setLang(lang === 'en' ? 'ar' : 'en');
-
-  const navLinks = [
-    { path: '/', label: t.heroTitle.split(' ')[0] }, // "Learn/Ta'alam" simplified
-    { path: '/courses', label: t.courses },
-    { path: '/dashboard', label: t.dashboard },
-    { path: '/admin', label: t.admin },
-  ];
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-brand-dark/90 backdrop-blur-md border-b border-brand-card sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-lg">
-               <Code2 className="h-6 w-6 text-white" />
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="bg-stone-900 text-white p-1.5 rounded-md">
+              <PenTool size={20} />
             </div>
-            <span className="font-bold text-xl text-white hidden sm:block tracking-tight">
-              Pro<span className="text-brand-accent">Code</span>Free
+            <span className="font-display font-bold text-xl text-stone-900">
+              Web Author
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-brand-accent ${
-                  location.pathname === link.path ? 'text-brand-accent' : 'text-gray-300'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            
-            <button
-              onClick={toggleLang}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-card border border-gray-700 text-gray-300 hover:border-brand-primary transition-all text-xs uppercase"
+          <div className="flex items-center gap-6">
+            <Link
+              to="/dashboard"
+              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+                isActive('/dashboard') 
+                  ? 'text-stone-900' 
+                  : 'text-stone-500 hover:text-stone-900'
+              }`}
             >
-              <Globe size={14} />
-              {lang === 'en' ? 'AR' : 'EN'}
-            </button>
-          </div>
+              <Layout size={18} />
+              <span className="hidden sm:inline">Dashboard</span>
+            </Link>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
-             <button
-              onClick={toggleLang}
-              className="flex items-center gap-1 text-gray-300 text-xs uppercase"
+            <Link
+              to="/profile"
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                isActive('/profile')
+                  ? 'bg-stone-100 text-stone-900 ring-1 ring-stone-200'
+                  : 'bg-stone-900 text-white hover:bg-stone-800'
+              }`}
             >
-              {lang === 'en' ? 'AR' : 'EN'}
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-300 hover:text-white"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+              {isActive('/profile') ? (
+                <>
+                  <User size={18} />
+                  <span>Viewing Profile</span>
+                </>
+              ) : (
+                <>
+                  <ExternalLink size={16} />
+                  <span>View Public Page</span>
+                </>
+              )}
+            </Link>
           </div>
         </div>
       </div>
-
-      {/* Mobile Dropdown */}
-      {isOpen && (
-        <div className="md:hidden bg-brand-card border-b border-gray-700">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => setIsOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  location.pathname === link.path
-                    ? 'bg-brand-primary/20 text-brand-accent'
-                    : 'text-gray-300 hover:bg-gray-800'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
